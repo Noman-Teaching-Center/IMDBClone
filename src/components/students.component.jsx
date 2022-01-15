@@ -61,7 +61,7 @@ class Students extends Component {
 				),
 			},
 
-			exclude: ['img'],
+			exclude: [],
 		};
 		return <Table data={students} metadata={studentsTableMetadata} />;
 	}

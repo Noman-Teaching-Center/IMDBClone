@@ -1,35 +1,19 @@
 import React, { Component } from 'react';
 import Rating from './common/ratings/rating.component';
 import Table from './common/table/table.component';
+import getMovies from '../services/getMovies.service';
 
 class Movies extends Component {
 	constructor() {
 		super();
 		this.state = {
-			movies: [
-				{
-					id: '1',
-					title: 'The Godfather',
-					year: '1994',
-					ratings: '9.2',
-					yourRating: true,
-				},
-				{
-					id: '2',
-					title: '12 Angry Men',
-					year: '1957',
-					ratings: '8.9',
-					yourRating: false,
-				},
-				{
-					id: '3',
-					title: 'Pulp Fiction',
-					year: '1994',
-					ratings: '8.8',
-					yourRating: true,
-				},
-			],
+			movies: [],
 		};
+	}
+
+	async componentDidMount() {
+		const movies = await getMovies();
+		this.setState({ movies });
 	}
 
 	toggleYourRating = (movieId) => {
@@ -56,10 +40,11 @@ class Movies extends Component {
 			id: {
 				header: 'Rank',
 				render: (id) => <p>{id}</p>,
+				key: true,
 			},
 			title: {
 				header: 'Title',
-				render: (title) => <p className="text-red-500">{title}</p>,
+				render: (title) => <p>{title}</p>,
 			},
 			year: {
 				render: (year) => <p>{year}</p>,
@@ -71,15 +56,29 @@ class Movies extends Component {
 				header: 'Your Rating',
 				render: (isRated, movie) => (
 					<Rating
-						isRated={isRated}
+						isRated={!!isRated}
 						toggleIsRated={() => this.toggleYourRating(movie.id)}
 					/>
 				),
 			},
-			exclude: ['ratings', 'title'],
+			exclude: ['ratings'],
 		};
 
-		return <Table data={movies} metadata={moviesTableMetadata} />;
+		return (
+			<div className="flex">
+				{movies.length > 0 ? (
+					<Table data={movies} metadata={moviesTableMetadata} />
+				) : (
+					<button
+						type="button"
+						className="bg-indigo-500 m-auto my-2 p-4 rounded-xl text-white"
+						disabled
+					>
+						Processing...
+					</button>
+				)}
+			</div>
+		);
 	}
 }
 
