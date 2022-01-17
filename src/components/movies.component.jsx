@@ -46,11 +46,17 @@ class Movies extends Component {
 				header: 'Title',
 				render: (title) => <p>{title}</p>,
 			},
+			ratings: {
+				render: (rating) => <p>{rating}</p>,
+			},
 			year: {
 				render: (year) => <p>{year}</p>,
 			},
-			ratings: {
-				render: (rating) => <p>{rating}</p>,
+			posterUrl: {
+				header: 'Poster',
+				render: (posterUrl, movie) => (
+					<img src={posterUrl} alt={movie.title} className="h-24" />
+				),
 			},
 			yourRating: {
 				header: 'Your Rating',
