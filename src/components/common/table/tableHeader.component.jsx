@@ -14,7 +14,7 @@ const TableHeader = ({ columns, sort, updateSort }) => {
 	const getSortingIcon = (column) => {
 		return column === sort.column ? (
 			<i
-				className={`bi bi-arrow-${sort.order === 'asc' ? 'up' : 'down'}-short`}
+				className={`mx-2 bi bi-sort-${sort.order === 'asc' ? 'up' : 'down'}`}
 			/>
 		) : undefined;
 	};
