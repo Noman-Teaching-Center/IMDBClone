@@ -41,16 +41,19 @@ class Movies extends Component {
 				header: 'Rank',
 				render: (id) => <p>{id}</p>,
 				key: true,
+				sort: true,
 			},
 			title: {
 				header: 'Title',
 				render: (title) => <p>{title}</p>,
+				sort: false,
 			},
 			ratings: {
 				render: (rating) => <p>{rating}</p>,
 			},
 			year: {
 				render: (year) => <p>{year}</p>,
+				sort: true,
 			},
 			posterUrl: {
 				header: 'Poster',
