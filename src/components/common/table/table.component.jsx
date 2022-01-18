@@ -11,8 +11,10 @@ import { getFilteredColumns, getSortingColumns } from './tableUtility';
 class Table extends Component {
 	constructor(props) {
 		super(props);
+
 		const filteredColumns = getFilteredColumns(props.metadata);
 		const sortingColumns = getSortingColumns(filteredColumns);
+
 		this.state = {
 			sort: {
 				column: sortingColumns[0],

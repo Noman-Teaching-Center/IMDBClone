@@ -31,10 +31,10 @@ const TableHeader = ({ columns, sort, updateSort }) => {
 	return (
 		<thead>
 			<tr>
-				{Object.keys(headers).map((col) => (
-					<th scope="col" key={nonce++} onClick={() => handleOnClick(col)}>
-						{headers[col]}
-						{getSortingIcon(col)}
+				{Object.keys(headers).map((column) => (
+					<th scope="col" key={nonce++} onClick={() => handleOnClick(column)}>
+						{headers[column]}
+						{getSortingIcon(column)}
 					</th>
 				))}
 			</tr>

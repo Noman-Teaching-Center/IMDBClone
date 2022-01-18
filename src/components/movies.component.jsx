@@ -6,6 +6,7 @@ import getMovies from '../services/getMovies.service';
 class Movies extends Component {
 	constructor() {
 		super();
+
 		this.state = {
 			movies: [],
 		};
