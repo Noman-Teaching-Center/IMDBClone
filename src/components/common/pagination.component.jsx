@@ -10,9 +10,6 @@ const Pagination = ({
 }) => {
 	const totalPages = Math.ceil(totalNoOfItems / itemsPerPage);
 	const pages = _.range(1, totalPages + 1, 1);
-	let pages1 = _.range(currentPage - 2, currentPage + 3, 1);
-	pages1 = pages1.filter((page) => page > 0 && page <= totalPages);
-	console.log(pages1);
 
 	return (
 		<nav aria-label="Page navigation example" className="m-auto">

@@ -84,7 +84,7 @@ class Table extends Component {
 		const data = this.getOrganizedData();
 
 		return (
-			<>
+			<div>
 				<table className="table">
 					<TableHeader
 						columns={filteredColumns}
@@ -94,7 +94,7 @@ class Table extends Component {
 					<TableBody data={data} metadata={metadata} />
 				</table>
 				<br />
-				{currentPage ? (
+				{currentPage && data.length ? (
 					<Pagination
 						currentPage={currentPage}
 						totalNoOfItems={originalData.length}
@@ -102,7 +102,7 @@ class Table extends Component {
 						updateCurrentPage={this.updateCurrentPage}
 					/>
 				) : null}
-			</>
+			</div>
 		);
 	}
 }

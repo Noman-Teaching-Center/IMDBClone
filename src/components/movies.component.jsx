@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import Rating from './common/ratings/rating.component';
 import Table from './common/table/table.component';
 import getMovies from '../services/getMovies.service';
+import getGenres from '../services/getGenres.service';
+import Filter from './common/filter.component';
 
 class Movies extends Component {
 	constructor() {
@@ -9,13 +12,25 @@ class Movies extends Component {
 
 		this.state = {
 			movies: [],
+			genres: [],
+			selectedGenres: [],
 		};
 	}
 
 	async componentDidMount() {
 		const movies = await getMovies();
-		this.setState({ movies });
+		const genres = await getGenres();
+		this.setState({ movies, genres });
 	}
+
+	filterMoviesByGenre = () => {
+		const { movies, selectedGenres } = this.state;
+		if (selectedGenres.length < 1) return movies;
+		const updatedMovies = movies.filter(
+			({ genres }) => _.intersection(genres, selectedGenres).length > 0
+		);
+		return updatedMovies;
+	};
 
 	toggleYourRating = (movieId) => {
 		const { movies } = this.state;
@@ -35,8 +50,19 @@ class Movies extends Component {
 		});
 	};
 
+	selectGenre = (genre) => {
+		const { selectedGenres } = this.state;
+		if (!selectedGenres.includes(genre)) {
+			this.setState({ selectedGenres: [...selectedGenres, genre] });
+		} else {
+			this.setState({
+				selectedGenres: selectedGenres.filter((_genre) => _genre !== genre),
+			});
+		}
+	};
+
 	render() {
-		const { movies } = this.state;
+		const { movies, genres, selectedGenres } = this.state;
 		const moviesTableMetadata = {
 			id: {
 				header: 'Rank',
@@ -73,15 +99,24 @@ class Movies extends Component {
 			},
 			exclude: ['ratings'],
 			paginate: {
-				startingPage: 4,
+				startingPage: 1,
 				itemsPerPage: 5,
 			},
 		};
 
+		const filteredMovies = this.filterMoviesByGenre();
+
 		return (
-			<div className="flex flex-col">
+			<div className="flex flex-col m-4">
 				{movies.length > 0 ? (
-					<Table data={movies} metadata={moviesTableMetadata} />
+					<div className="flex flex-row space-x-4">
+						<Filter
+							categories={genres}
+							currentSelection={selectedGenres}
+							onSelect={this.selectGenre}
+						/>
+						<Table data={filteredMovies} metadata={moviesTableMetadata} />
+					</div>
 				) : (
 					<button
 						type="button"
