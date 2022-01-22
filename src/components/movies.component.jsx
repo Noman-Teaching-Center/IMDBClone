@@ -72,10 +72,14 @@ class Movies extends Component {
 				),
 			},
 			exclude: ['ratings'],
+			paginate: {
+				startingPage: 4,
+				itemsPerPage: 5,
+			},
 		};
 
 		return (
-			<div className="flex">
+			<div className="flex flex-col">
 				{movies.length > 0 ? (
 					<Table data={movies} metadata={moviesTableMetadata} />
 				) : (

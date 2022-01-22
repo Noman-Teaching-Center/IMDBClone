@@ -7,10 +7,15 @@ import TableHeader from './tableHeader.component';
 import TableBody from './tableBody.component';
 
 import { getFilteredColumns, getSortingColumns } from './tableUtility';
+import Pagination from '../pagination.component';
 
 class Table extends Component {
 	constructor(props) {
 		super(props);
+
+		const {
+			metadata: { paginate },
+		} = props;
 
 		const filteredColumns = getFilteredColumns(props.metadata);
 		const sortingColumns = getSortingColumns(filteredColumns);
@@ -21,15 +26,29 @@ class Table extends Component {
 				order: 'asc',
 			},
 		};
+
+		if (paginate) {
+			this.state.currentPage = paginate.startingPage;
+		}
 	}
 
 	getOrganizedData = () => {
-		const { data: rawData } = this.props;
-		const { sort } = this.state;
+		const {
+			data: rawData,
+			metadata: {
+				paginate: { itemsPerPage },
+			},
+		} = this.props;
+		const { sort, currentPage } = this.state;
 
 		// sort the data
-		const data = _.orderBy(rawData, [sort.column], [sort.order]);
-		// TODO pagination
+		let data = _.orderBy(rawData, [sort.column], [sort.order]);
+
+		// pagination
+		data = data.slice(
+			(currentPage - 1) * itemsPerPage,
+			currentPage * itemsPerPage
+		);
 
 		return data;
 	};
@@ -49,22 +68,41 @@ class Table extends Component {
 		});
 	};
 
+	updateCurrentPage = (currentPage) => {
+		this.setState({ currentPage });
+	};
+
 	render() {
-		const { metadata } = this.props;
-		const { sort } = this.state;
+		const {
+			metadata,
+			metadata: { paginate },
+			data: originalData,
+		} = this.props;
+		const { sort, currentPage } = this.state;
 
 		const filteredColumns = getFilteredColumns(metadata);
 		const data = this.getOrganizedData();
 
 		return (
-			<table className="table">
-				<TableHeader
-					columns={filteredColumns}
-					sort={sort}
-					updateSort={this.updateSort}
-				/>
-				<TableBody data={data} metadata={metadata} />
-			</table>
+			<>
+				<table className="table">
+					<TableHeader
+						columns={filteredColumns}
+						sort={sort}
+						updateSort={this.updateSort}
+					/>
+					<TableBody data={data} metadata={metadata} />
+				</table>
+				<br />
+				{currentPage ? (
+					<Pagination
+						currentPage={currentPage}
+						totalNoOfItems={originalData.length}
+						itemsPerPage={paginate.itemsPerPage}
+						updateCurrentPage={this.updateCurrentPage}
+					/>
+				) : null}
+			</>
 		);
 	}
 }
