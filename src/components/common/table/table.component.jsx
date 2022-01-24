@@ -1,5 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import propTypes, { object } from 'prop-types';
 import _ from 'lodash';
 
@@ -9,37 +9,29 @@ import TableBody from './tableBody.component';
 import { getFilteredColumns, getSortingColumns } from './tableUtility';
 import Pagination from '../pagination.component';
 
-class Table extends Component {
-	constructor(props) {
-		super(props);
+const Table = (props) => {
+	const {
+		metadata,
+		metadata: { paginate },
+	} = props;
 
-		const {
-			metadata: { paginate },
-		} = props;
+	const filteredColumns = getFilteredColumns(metadata);
+	const sortingColumns = getSortingColumns(filteredColumns);
 
-		const filteredColumns = getFilteredColumns(props.metadata);
-		const sortingColumns = getSortingColumns(filteredColumns);
+	const [sort, setSort] = useState({
+		column: sortingColumns[0],
+		order: 'asc',
+	});
 
-		this.state = {
-			sort: {
-				column: sortingColumns[0],
-				order: 'asc',
-			},
-		};
+	const [currentPage, setCurrentPage] = useState(paginate?.startingPage);
 
-		if (paginate) {
-			this.state.currentPage = paginate.startingPage;
-		}
-	}
-
-	getOrganizedData = () => {
+	const getOrganizedData = () => {
 		const {
 			data: rawData,
 			metadata: {
 				paginate: { itemsPerPage },
 			},
-		} = this.props;
-		const { sort, currentPage } = this.state;
+		} = props;
 
 		// sort the data
 		let data = _.orderBy(rawData, [sort.column], [sort.order]);
@@ -53,60 +45,45 @@ class Table extends Component {
 		return data;
 	};
 
-	updateSort = ({ column, order }) => {
-		const { metadata } = this.props;
-
-		const filteredColumns = getFilteredColumns(metadata);
-		const sortingColumns = getSortingColumns(filteredColumns);
-
+	const updateSort = ({ column, order }) => {
 		if (!(sortingColumns.includes(column) && /^(a|de)sc$/.test(order))) return;
-		this.setState({
-			sort: {
-				column,
-				order,
-			},
+		setSort({
+			column,
+			order,
 		});
 	};
 
-	updateCurrentPage = (currentPage) => {
-		this.setState({ currentPage });
+	const updateCurrentPage = (updatedCurrentPage) => {
+		setCurrentPage(updatedCurrentPage);
 	};
 
-	render() {
-		const {
-			metadata,
-			metadata: { paginate },
-			data: originalData,
-		} = this.props;
-		const { sort, currentPage } = this.state;
+	const { data: originalData } = props;
 
-		const filteredColumns = getFilteredColumns(metadata);
-		const data = this.getOrganizedData();
+	const data = getOrganizedData();
 
-		return (
-			<div className="flex flex-col">
-				<table className="table">
-					<TableHeader
-						columns={filteredColumns}
-						sort={sort}
-						updateSort={this.updateSort}
+	return (
+		<div className="flex flex-col">
+			<table className="table">
+				<TableHeader
+					columns={filteredColumns}
+					sort={sort}
+					updateSort={updateSort}
+				/>
+				<TableBody data={data} metadata={metadata} />
+			</table>
+			{currentPage && data.length ? (
+				<div className="m-auto">
+					<Pagination
+						currentPage={currentPage}
+						totalNoOfItems={originalData.length}
+						itemsPerPage={paginate.itemsPerPage}
+						updateCurrentPage={updateCurrentPage}
 					/>
-					<TableBody data={data} metadata={metadata} />
-				</table>
-				{currentPage && data.length ? (
-					<div className="m-auto">
-						<Pagination
-							currentPage={currentPage}
-							totalNoOfItems={originalData.length}
-							itemsPerPage={paginate.itemsPerPage}
-							updateCurrentPage={this.updateCurrentPage}
-						/>
-					</div>
-				) : null}
-			</div>
-		);
-	}
-}
+				</div>
+			) : null}
+		</div>
+	);
+};
 
 Table.propTypes = {
 	data: propTypes.arrayOf(object).isRequired,
