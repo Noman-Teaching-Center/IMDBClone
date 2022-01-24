@@ -3,7 +3,6 @@
 import propTypes from 'prop-types';
 import React from 'react';
 
-// eslint-disable-next-line no-unused-vars
 const Filter = ({ categories, currentSelection, onSelect }) => {
 	return (
 		<ul className="m-4">
