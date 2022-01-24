@@ -115,7 +115,9 @@ class Movies extends Component {
 							currentSelection={selectedGenres}
 							onSelect={this.selectGenre}
 						/>
-						<Table data={filteredMovies} metadata={moviesTableMetadata} />
+						<div className="flex-grow">
+							<Table data={filteredMovies} metadata={moviesTableMetadata} />
+						</div>
 					</div>
 				) : (
 					<button

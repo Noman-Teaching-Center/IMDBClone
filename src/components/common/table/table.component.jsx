@@ -84,7 +84,7 @@ class Table extends Component {
 		const data = this.getOrganizedData();
 
 		return (
-			<div>
+			<div className="flex flex-col">
 				<table className="table">
 					<TableHeader
 						columns={filteredColumns}
@@ -93,14 +93,15 @@ class Table extends Component {
 					/>
 					<TableBody data={data} metadata={metadata} />
 				</table>
-				<br />
 				{currentPage && data.length ? (
-					<Pagination
-						currentPage={currentPage}
-						totalNoOfItems={originalData.length}
-						itemsPerPage={paginate.itemsPerPage}
-						updateCurrentPage={this.updateCurrentPage}
-					/>
+					<div className="m-auto">
+						<Pagination
+							currentPage={currentPage}
+							totalNoOfItems={originalData.length}
+							itemsPerPage={paginate.itemsPerPage}
+							updateCurrentPage={this.updateCurrentPage}
+						/>
+					</div>
 				) : null}
 			</div>
 		);

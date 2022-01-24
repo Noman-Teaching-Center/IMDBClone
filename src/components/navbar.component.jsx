@@ -4,7 +4,7 @@ const Navbar = () => {
 	return (
 		<nav className="navbar navbar-dark bg-dark justify-content-between p-4">
 			<a href="root" className="navbar-brand">
-				IMDB
+				FAKE IMDB
 			</a>
 		</nav>
 	);
