@@ -2,42 +2,28 @@
 /* eslint-disable jsx-a11y/mouse-events-have-key-events */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import propTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
-class Rating extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			isHovered: false,
-		};
-	}
+const Rating = ({ isRated, toggleIsRated }) => {
+	const [isHovered, setIsHovered] = useState(false);
 
-	handleMouseOver = (isHovered) => {
-		this.setState({
-			isHovered,
-		});
-	};
+	const handleMouseOver = (updatedIsHovered) => setIsHovered(updatedIsHovered);
 
-	getClassName = () => {
-		const { isRated } = this.props;
-		const { isHovered } = this.state;
+	const getClassName = () => {
 		return isRated
 			? 'bi bi-star-fill'
 			: `bi bi-star ${isHovered ? 'text-primary' : ''}`;
 	};
 
-	render() {
-		const { toggleIsRated } = this.props;
-		return (
-			<i
-				onMouseOver={() => this.handleMouseOver(true)}
-				onMouseOut={() => this.handleMouseOver(false)}
-				className={this.getClassName()}
-				onClick={toggleIsRated}
-			/>
-		);
-	}
-}
+	return (
+		<i
+			onMouseOver={() => handleMouseOver(true)}
+			onMouseOut={() => handleMouseOver(false)}
+			className={getClassName()}
+			onClick={toggleIsRated}
+		/>
+	);
+};
 
 Rating.propTypes = {
 	isRated: propTypes.bool.isRequired,
