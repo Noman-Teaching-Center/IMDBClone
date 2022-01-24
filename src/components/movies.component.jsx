@@ -11,9 +11,9 @@ const Movies = () => {
 	const [genres, setGenres] = useState([]);
 	const [selectedGenres, setSelectedGenres] = useState([]);
 
-	useEffect(async () => {
-		setMovies(await getMovies());
-		setGenres(await getGenres());
+	useEffect(() => {
+		getMovies().then((fetchedMovies) => setMovies(fetchedMovies));
+		getGenres().then((fetchedGenres) => setGenres(fetchedGenres));
 	}, []);
 
 	const filterMoviesByGenre = () => {
