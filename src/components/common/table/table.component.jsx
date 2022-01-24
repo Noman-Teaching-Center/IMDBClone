@@ -53,10 +53,6 @@ const Table = (props) => {
 		});
 	};
 
-	const updateCurrentPage = (updatedCurrentPage) => {
-		setCurrentPage(updatedCurrentPage);
-	};
-
 	const { data: originalData } = props;
 
 	const data = getOrganizedData();
@@ -77,7 +73,7 @@ const Table = (props) => {
 						currentPage={currentPage}
 						totalNoOfItems={originalData.length}
 						itemsPerPage={paginate.itemsPerPage}
-						updateCurrentPage={updateCurrentPage}
+						updateCurrentPage={setCurrentPage}
 					/>
 				</div>
 			) : null}
