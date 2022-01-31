@@ -6,7 +6,7 @@ const Navbar = () => {
 		<nav className="navbar navbar-dark bg-dark justify-content-between p-4">
 			<div>
 				<Link to="/" className="navbar-brand font-extrabold">
-					FAKE IMDB
+					IMDB
 				</Link>
 				<Link to="/movies" className="navbar-brand">
 					Movies
